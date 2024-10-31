@@ -1,6 +1,11 @@
 import React, { useState, useRef } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/Validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
 const Login = () => {
   const [isSignInPage, setIsSignInPage] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -12,9 +17,39 @@ const Login = () => {
     e.preventDefault();
     const emailValue = email.current.value;
     const passwordValue = password.current.value;
-
     let message = checkValidData(emailValue, passwordValue);
     setErrorMessage(message);
+
+    if (message) return;
+    if (!isSignInPage) {
+      //sign up
+      createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + " " + errorMessage);
+          // ..
+        });
+    } else {
+      //sign in
+      signInWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + "" + errorMessage);
+        });
+    }
   };
 
   const toggleIsSignInPage = () => {
