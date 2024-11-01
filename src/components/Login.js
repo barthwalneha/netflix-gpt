@@ -1,22 +1,21 @@
 import React, { useState, useRef } from "react";
 import Header from "./Header";
+import { USER_AVATAR } from "../utils/constant";
 import { checkValidData } from "../utils/Validate";
 import { updateProfile } from "firebase/auth";
 import { addUser } from "../utils/userSlice";
+import { auth } from "../utils/firebase";
+import { useDispatch } from "react-redux";
 
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
 //-----------------------------------
 const Login = () => {
   const [isSignInPage, setIsSignInPage] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const name = useRef(null);
   const email = useRef(null);
@@ -39,8 +38,7 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: nameValue,
-            photoURL:
-              "https://cdn2.f-cdn.com/contestentries/1440473/30778261/5bdd02db9ff4c_thumb900.jpg",
+            photoURL: USER_AVATAR,
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;
@@ -52,7 +50,6 @@ const Login = () => {
                   photoURL: photoURL,
                 })
               );
-              navigate("/browse");
             })
             .catch((error) => {
               setErrorMessage(error);
@@ -73,8 +70,6 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
-          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
