@@ -1,29 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { API_OPTIONS } from "../utils/constant";
+import React from "react";
+import useMovieTrailer from "../hooks/useMovieTrailer";
 
 const VideoBackground = ({ movie_id }) => {
-  const [trailerId, setTrailerId] = useState(null);
-  const getMovieVideos = async () => {
-    const data = await fetch(
-      "https://api.themoviedb.org/3/movie/912649/videos?language=en-US",
-      API_OPTIONS
-    );
-    const json = await data.json();
-    console.log(json);
-    const filterData = json.results.filter((video) => video.type === "Trailer");
+  const trailerId = useMovieTrailer(movie_id);
 
-    const trailer = filterData.length ? filterData[0] : json.results[0];
-    console.log(trailer);
-    setTrailerId(trailer.key);
-  };
-  useEffect(() => {
-    getMovieVideos();
-  }, []);
+  if (!trailerId) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div>
+    <div className="w-screen">
       <iframe
-        src={"https://www.youtube.com/embed/" + trailerId}
+        className="w-screen aspect-video"
+        src={`https://www.youtube.com/embed/${trailerId}?autoplay=1&mute=1`}
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       ></iframe>
