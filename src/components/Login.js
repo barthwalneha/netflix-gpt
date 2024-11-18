@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import Header from "./Header";
+import { BG_URL } from "../utils/constant";
 import { USER_AVATAR } from "../utils/constant";
 import { checkValidData } from "../utils/Validate";
 import { updateProfile } from "firebase/auth";
@@ -84,10 +85,7 @@ const Login = () => {
       <Header />
 
       <div className="absolute">
-        <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/fc164b4b-f085-44ee-bb7f-ec7df8539eff/d23a1608-7d90-4da1-93d6-bae2fe60a69b/IN-en-20230814-popsignuptwoweeks-perspective_alpha_website_large.jpg"
-          alt="bgimage"
-        />
+        <img src={BG_URL} alt="bgimage" />
       </div>
       <form className="absolute w-1/4 h-2/3 bg-black bg-opacity-80  p-5 my-40 mx-auto right-0 left-0 rounded-lg">
         <h1 className="font-bold text-3xl py-4  text-white">
